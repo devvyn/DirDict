@@ -3,7 +3,7 @@ from os import getcwd
 import requests
 from bs4 import BeautifulSoup
 
-from cache.file_system import FileSystemCache
+from storage.file_system import FileSystemCache
 
 
 class IndeedJobSearchScraper:

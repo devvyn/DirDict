@@ -24,7 +24,7 @@ class FileSystemCache:
         os.makedirs(directory, mode=FileSystemCache.mode, exist_ok=True)
 
     @staticmethod
-    def purge(directory: (bytes or str) = directory) -> None:
+    def destruct(directory: (bytes or str) = directory) -> None:
         """
         Explicitly delete the files on disk, thus clearing all cache instances in the specified directory
 
