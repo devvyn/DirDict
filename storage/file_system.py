@@ -8,7 +8,8 @@ import requests
 
 class FileSystemCache:
     """Use the file system as a key-value store, with file modified date as expiration indicator"""
-    mode = 0o640
+    file_mode = 0o640
+    directory_mode = 0o750
     directory = '.web_rips'
 
     def __init__(self, directory=directory):
@@ -21,7 +22,7 @@ class FileSystemCache:
 
         :param directory:
         """
-        os.makedirs(directory, mode=FileSystemCache.mode, exist_ok=True)
+        os.makedirs(directory, mode=FileSystemCache.directory_mode, exist_ok=True)
 
     @staticmethod
     def destruct(directory: (bytes or str) = directory) -> None:
@@ -48,7 +49,7 @@ class FileSystemCache:
     def delete(self, key):
         # delete file if exist,
         # raise exception if not
-        ...
+        raise NotImplemented(f'{__name__} is not implemented')
 
     def clean(self):
         for filename in (key for key in self.keys() if key.expired):
@@ -60,4 +61,7 @@ class FileSystemCache:
 
     def items(self):
         # get filenames and file reader partials
-        raise NotImplemented(f'{__name__} is not implemented')
+        raise NotImplementedError(f'{__name__} not implemented')
+
+    def put(self):
+        raise NotImplementedError(f'{__name__} not implemented')
