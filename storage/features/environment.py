@@ -3,6 +3,13 @@ from os import path
 from shutil import rmtree
 from tempfile import mkdtemp
 
+from storage.file_system import FileSystemCache
+
+
+def before_feature(_, feature):
+    if 'directory_setup' != feature.name:
+        FileSystemCache.init('test-spam-delete-me')
+
 
 def before_scenario(_, scenario):
     dtemp = mkdtemp()
