@@ -13,7 +13,8 @@ use_step_matcher("re")
 @given("the storage directory does not exist")
 def step_impl(context: Context):
     """
-    create new temporary directory and halt if not empty
+    Assume working directory is new but halt if not empty.
+    `environment.py` should have the before_scenario hook create it.
     """
     directory = context.scenario.temporary_directory_name
     assert not os.listdir(directory)
