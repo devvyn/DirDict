@@ -16,7 +16,7 @@ def step_impl(context: Context):
     Assume working directory is new, but halt if it's not empty.
     `environment.py` should have the before_scenario hook create it.
     """
-    directory = context.scenario.temporary_directory_name
+    directory = context.scenario.temporary_directory_path
     assert not os.listdir(directory)
 
 
@@ -25,8 +25,8 @@ def step_impl(context: Context):
     """
     initialize within the temporary directory using the name 'test-spam-delete-me'
     """
-    temporary_directory_name = context.scenario.temporary_directory_name
-    directory = os.path.join(temporary_directory_name, 'test-spam-delete-me')
+    temporary_directory_path = context.scenario.temporary_directory_path
+    directory = os.path.join(temporary_directory_path, 'test-spam-delete-me')
     FileSystemCache.init(directory)
 
 
@@ -35,8 +35,8 @@ def step_impl(context: Context):
     """
     check if 'test-spam-delete-me' directory exists
     """
-    storage_directory_name = context.scenario.storage_directory_name
-    assert exists(storage_directory_name)
+    storage_directory_path = context.scenario.storage_directory_path
+    assert exists(storage_directory_path)
 
 
 @given("the storage directory exists")
@@ -44,15 +44,15 @@ def step_impl(context: Context):
     """
     create new temporary directory and create 'test-spam-delete-me' subdirectory
     """
-    temporary_directory_name = context.scenario.temporary_directory_name
-    directory = os.path.join(temporary_directory_name, 'test-spam-delete-me')
+    temporary_directory_path = context.scenario.temporary_directory_path
+    directory = os.path.join(temporary_directory_path, 'test-spam-delete-me')
     mkdir(directory)
 
 
 @then("the storage directory exits")
 def step_impl(context: Context):
-    temporary_directory_name = context.scenario.temporary_directory_name
-    directory = os.path.join(temporary_directory_name, 'test-spam-delete-me')
+    temporary_directory_path = context.scenario.temporary_directory_path
+    directory = os.path.join(temporary_directory_path, 'test-spam-delete-me')
     assert exists(directory)
 
 
@@ -69,7 +69,7 @@ def step_impl(context: Context):
     """
     call destruct()
     """
-    FileSystemCache.destruct(context.scenario.storage_directory_name)
+    FileSystemCache.destruct(context.scenario.storage_directory_path)
 
 
 @then("the storage directory does not exist")
@@ -77,4 +77,4 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    assert not exists(context.scenario.storage_directory_name)
+    assert not exists(context.scenario.storage_directory_path)
