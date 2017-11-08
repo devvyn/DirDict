@@ -1,21 +1,33 @@
-Feature: Save text to file, load text from file, reject stale files
+Feature: Save and load
 
-  Background: Fresh files only, I insist!
-    Given I never want a file that's more than an hour old
+  Background: Fresh keys only, I insist!
+    Given I never want a key that's more than an hour old
 
-  Scenario: Fresh key requested
-    Given a stored file that's a minute old
-    When I request that file
-    Then I receive the contents of that file
+  Scenario: Save a key and value
+    Given an empty storage directory
+    When I save some text to a key named "whatever"
+    Then the storage directory contains a file named "whatever"
+    And that file contains the specified text
 
-  Scenario: Expired key requested
-    Given a stored file that's 66 minutes old
-    When I request that file
-    Then the file is not loaded
-    And that file no longer exists
+  Scenario: Request non-existent key
+    Given an empty storage directory
+    When I request any specific key by name
+    Then the absence of the specified key is signalled
 
-  Scenario: Non-existent key requested
-    Given no files
-    When I request any file
-    Then a KeyError exception is raised
-    And the storage directory is still empty
+  Scenario: Request fresh key
+    Given a key that's 1 minute old
+    When I request that key
+    Then I get the contents of the file that matches the key by name
+
+  Scenario: Request expired key
+    Given a key that's 61 minutes old
+    When I request that key
+    Then the absence of the specified key is signalled
+    And that storage key is not in the list of stored keys
+    And the storage directory contains no file that matches the key by name
+
+  Scenario: Delete key
+    Given the storage directory contains a file with a given name
+    When I delete the storage key that matches the file's name
+    And the storage directory contains no file that matches the key by name
+    And that storage key is not in the list of stored keys
