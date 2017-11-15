@@ -1,7 +1,7 @@
 Feature: Save and load
 
   Background: Fresh keys only, I insist!
-    Given I never want a key that's more than an hour old
+    Given I don't accept keys more than an hour old
 
   Scenario: Save a key and value
     Given an empty storage directory
@@ -15,19 +15,19 @@ Feature: Save and load
     Then the absence of the specified key is signalled
 
   Scenario: Request fresh key
-    Given a key that's 1 minute old
+    Given a file that's 1 minute old
     When I request that key
     Then I get the contents of the file that matches the key by name
 
   Scenario: Request expired key
-    Given a key that's 61 minutes old
+    Given a file that's 61 minutes old
     When I request that key
     Then the absence of the specified key is signalled
-    And that storage key is not in the list of stored keys
+    And that storage key is not in the collection of stored keys
     And the storage directory contains no file that matches the key by name
 
   Scenario: Delete key
     Given the storage directory contains a file with a given name
     When I delete the storage key that matches the file's name
-    And the storage directory contains no file that matches the key by name
-    And that storage key is not in the list of stored keys
+    Then that storage key is not in the collection of stored keys
+    Then the storage directory contains no file that matches the key by name

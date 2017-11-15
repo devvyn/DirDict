@@ -6,7 +6,7 @@ from shutil import rmtree
 import requests
 
 
-class FileSystemCache:
+class FileSystemStorage:
     """Use the file system as a key-value store, with file modified date as expiration indicator"""
     file_mode = 0o640
     directory_mode = 0o750
@@ -22,7 +22,7 @@ class FileSystemCache:
 
         :param directory:
         """
-        os.makedirs(directory, mode=FileSystemCache.directory_mode, exist_ok=True)
+        os.makedirs(directory, mode=FileSystemStorage.directory_mode, exist_ok=True)
 
     @staticmethod
     def destruct(directory: (bytes or str) = directory) -> None:
@@ -37,14 +37,15 @@ class FileSystemCache:
     def get(key):
         # read file if exist and not expired,
 
-        if exists(key) and os.path.getmtime(key) - time():
-            with os.open(key, os.O_RDONLY, mode=FileSystemCache.mode) as file:
+        if exists(key) and os.path.getmtime(key) - time():  # @todo explicitly check time difference against value
+            with os.open(key, os.O_RDONLY, mode=FileSystemStorage.mode) as file:
                 return file.read()
+        # @todo extract web specific actions out of this class
         # fetch from URL and write to file if not
         response = requests.get(key)
         response.raise_for_status()
+        # @todo always return non-null value or raise exception
         return response
-        # always return non-null value or raise exception
 
     def delete(self, key):
         # delete file if exist,

@@ -3,7 +3,7 @@ from os import getcwd
 import requests
 from bs4 import BeautifulSoup
 
-from storage.file_system import FileSystemCache
+from storage.file_system import FileSystemStorage
 
 
 class IndeedJobSearchScraper:
@@ -16,7 +16,8 @@ class IndeedJobSearchScraper:
         search_result_selector = '.result a[data-tn-element="jobTitle"]'
 
         # if cache_miss:
-        cache = FileSystemCache()
+        cache = FileSystemStorage()
+        # @todo provide URL for requestes.get()
         search_response = cache.get(base_href + search_url) or requests.get()
 
         # save to file, keep in memory

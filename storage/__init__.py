@@ -1,4 +1,4 @@
-from storage.file_system import FileSystemCache as Cache
+from storage.file_system import FileSystemStorage as Cache
 
 __all__=('Cache')
 
