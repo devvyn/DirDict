@@ -65,7 +65,7 @@ def step_impl(context: Context):
 @when("the storage directory is ordered to self-destruct")
 def step_impl(context: Context):
     """
-    call remove_directory()
+    call remove_base_path()
     """
     destruct(context.scenario.storage_path)
 
