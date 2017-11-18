@@ -40,7 +40,7 @@ def step_impl(context: runner.Context):
 def step_impl(context: runner.Context):
     some_text = 'Spam & eggs with toast and Spam'
     key = TEST_FILE_NAME
-    FileSystemStorage.set(key, some_text)
+    set(key, some_text)
 
 
 @then('the storage directory contains a file named "whatever"')
@@ -64,7 +64,7 @@ def step_impl(context):
 @when("I request any specific key by name")
 def step_impl(context: runner.Context):
     try:
-        context.results = FileSystemStorage.get(TEST_FILE_NAME,
+        context.results = get(TEST_FILE_NAME,
                                                 ttl_seconds=context.time_to_live_seconds)
     except KeyError as e:
         context.exception = e
@@ -102,7 +102,7 @@ def step_impl(context: runner.Context):
 
 @then("that storage key is not in the collection of stored keys")
 def step_impl(context: runner.Context):
-    assert TEST_FILE_NAME not in FileSystemStorage.keys()
+    assert TEST_FILE_NAME not in keys()
 
 
 @then("the storage directory contains no file that matches the key by name")
@@ -112,4 +112,4 @@ def step_impl(context: runner.Context):
 
 @given("the storage directory contains a file with a given name")
 def step_impl(context: runner.Context):
-    assert FileSystemStorage.get(TEST_FILE_NAME)
+    assert get(TEST_FILE_NAME)

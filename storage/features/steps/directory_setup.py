@@ -25,7 +25,7 @@ def step_impl(context: Context):
     """
     temporary_directory_path = context.scenario.temporary_directory_path
     directory = os.path.join(temporary_directory_path, 'test-spam-delete-me')
-    FileSystemStorage.init(directory)
+    init(directory)
 
 
 @then("the storage directory exists")
@@ -65,9 +65,9 @@ def step_impl(context: Context):
 @when("the storage directory is ordered to self-destruct")
 def step_impl(context: Context):
     """
-    call destruct()
+    call remove_directory()
     """
-    FileSystemStorage.destruct(context.scenario.storage_path)
+    destruct(context.scenario.storage_path)
 
 
 @then("the storage directory does not exist")

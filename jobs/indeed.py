@@ -18,7 +18,7 @@ class IndeedJobSearchScraper:
         # if cache_miss:
         cache = FileSystemStorage()
         # @todo provide URL for requestes.get()
-        search_response = cache.get(base_href + search_url) or requests.get()
+        search_response = get(base_href + search_url) or requests.get()
 
         # save to file, keep in memory
 
@@ -27,7 +27,7 @@ class IndeedJobSearchScraper:
         search_response_elements = search_response_parser.select(search_result_selector)
 
         for element in search_response_elements:
-            print(f'[{element.text}]({element.get("href")})')
+            print(f'[{element.text}]({ get("href")})')
 
         # job_page_summary_element = {'id': 'job_summary'}
 
