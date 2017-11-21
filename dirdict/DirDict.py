@@ -3,7 +3,7 @@ from io import BufferedWriter, BufferedReader
 from os import PathLike
 from typing import Tuple, Iterator, Mapping, Optional, Sequence, Dict, Union, Any, NoReturn
 
-from storage.file_system.functions import remove_base_path, keys, get, set_, del_, get_file_age, dir_len, \
+from storage.dirdict.functions import remove_base_path, keys, get, set_, del_, get_file_age, dir_len, \
     initialize_base_path, get_key_path, path_exists
 
 

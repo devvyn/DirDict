@@ -4,7 +4,7 @@ from os.path import exists, join
 from behave import *
 from behave import runner
 
-from storage.file_system import FileSystemStorage
+from storage.dirdict import FileSystemStorage
 
 TEST_FILE_NAME = 'fresh-spam.txt'
 

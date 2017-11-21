@@ -5,7 +5,7 @@ from os.path import exists
 from behave import *
 from behave.runner import Context
 
-from storage.file_system import FileSystemStorage
+from storage.dirdict import FileSystemStorage
 
 
 @given("the storage directory does not exist")
