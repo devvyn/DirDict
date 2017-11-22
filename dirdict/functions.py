@@ -12,7 +12,7 @@ This _could_ be supported in the future, however.
 """
 from datetime import timedelta, datetime
 from os import PathLike
-from pathlib import Path
+from pathlib import Path, PurePath
 from shutil import rmtree
 from time import timezone
 from typing import Union, Set
@@ -64,7 +64,7 @@ def get(path: PathlibPath) -> bytes:
     return Path(path).read_bytes()
 
 
-def get_key_path(base_path: PathlibPath, key: str) -> Path:
+def get_key_path(base_path: PathlibPath, key: str) -> PurePath:
     """
     Get the absolute path to the file that corresponds to the key
 
@@ -75,15 +75,18 @@ def get_key_path(base_path: PathlibPath, key: str) -> Path:
     return Path(base_path, key)
 
 
-def set_(path: PathlibPath, data: bytes) -> None:
+def set_(path: PathlibPath, data: bytes, mode=0o640) -> None:
     """
     Create file at path specified in `path` argument, if it doesn't already exist,
     then write or overwrite file contents with raw `value`
 
     :param path: Path to file to open for writing
-    :param data:
+    :param data: Bytes to write to file
+    :param mode: Permissions mask to apply to file
     """
-    Path(path).write_bytes(data)  # type: int
+    p = Path(path)
+    p.touch(mode=mode)
+    p.write_bytes(data)
 
 
 def del_(path: PathlibPath) -> None:
