@@ -8,7 +8,7 @@ Feature: Setup storage directory, clean up on destruction
   Scenario: Attempting to initialize when already initialized
     Given the storage directory exists
     When the storage directory is initialized
-    Then no exception is raised
+    Then the storage directory exists
 
   Scenario: Destroying the storage directory
     Given the storage directory exists

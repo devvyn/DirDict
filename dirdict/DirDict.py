@@ -2,7 +2,7 @@ from datetime import timedelta
 from pathlib import PurePath
 from typing import Tuple, Iterator, Mapping, Sequence, Union, Any, AnyStr, Set
 
-from storage.dirdict.functions import remove_base_path, keys, get, set_, del_, get_file_age, dir_len, \
+from dirdict.functions import remove_base_path, keys, get, set_, del_, get_file_age, dir_len, \
     initialize_base_path, get_key_path, path_exists, PathlibPath
 
 

@@ -54,14 +54,17 @@ def keys(path: PathlibPath) -> Set[str]:  # @todo confirm whether bytes may be r
     return {*Path(path).iterdir()}
 
 
-def get(path: PathlibPath) -> bytes:
+def get(*pathsegments: PathlibPath, ttl_seconds=None) -> bytes:
     """
     Get the file contents from disk, if the file exists in the storage directory
 
+    :param ttl_seconds:
     :return: File contents
     :raises: OSError
     """
-    return Path(path).read_bytes()
+    if ttl_seconds is None:
+        ttl_seconds = 0
+    return Path(*pathsegments).read_bytes()
 
 
 def get_key_path(base_path: PathlibPath, key: str) -> PurePath:

@@ -1,7 +1,7 @@
 Feature: Save and load
 
   Background: Fresh keys only, I insist!
-    Given I don't accept keys more than an hour old
+    Given I don't accept keys more than 60 minutes old
 
   Scenario: Save a key and value
     Given an empty storage directory
