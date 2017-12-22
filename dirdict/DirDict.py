@@ -1,12 +1,12 @@
 from datetime import timedelta
 from pathlib import PurePath
-from typing import Tuple, Iterator, Mapping, Sequence, Union, Any, AnyStr, Set
+from typing import Tuple, Iterator, Mapping, Sequence, Any, AnyStr, Set, Type
 
 from dirdict.functions import remove_base_path, keys, get, set_, del_, get_file_age, dir_len, \
     initialize_base_path, get_key_path, path_exists, PathlibPath
 
 
-def guard_string_type(o: Any, t: Union[type, Tuple[Union[type, tuple]]] = (bytes, str)) -> None:
+def guard_string_type(o: Any, t: Type = (bytes, str)) -> None:
     """
     Raise exception if `o` is not a string compatible with Python dict keys, in imitation of the built in dict methods
 
@@ -14,8 +14,8 @@ def guard_string_type(o: Any, t: Union[type, Tuple[Union[type, tuple]]] = (bytes
     :param t: The string type or tuple of types acceptable
     :raises: TypeError
     """
-    if isinstance(o, t):
-        raise TypeError('Expected string, got %s', type(o))
+    if not isinstance(o, t):
+        raise TypeError('Expected string, got', type(o))
 
 
 def get_optional_argument(name: str = None, position: int = None, *args, **kwargs) -> Any:
