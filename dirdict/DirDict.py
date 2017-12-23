@@ -335,7 +335,7 @@ class TTLCache(DirDict):
         :raises: KeyError
         """
         try:
-            return self.ttl_interval < get_file_age(get_key_path(key))
+            return self.ttl_interval < get_file_age(get_key_path(self.path, key))
         except OSError:
             raise KeyError(key)
 

@@ -70,10 +70,6 @@ def get(*pathsegments: PathlibPath, ttl_seconds=None) -> bytes:
 def get_key_path(base_path: PathlibPath, key: str) -> PurePath:
     """
     Get the absolute path to the file that corresponds to the key
-
-    The path will be the base path joined to a mangled version of the key. This is done to crudely ensure
-    cross-platform compatibility.
-
     """
     return Path(base_path, key)
 
