@@ -32,7 +32,7 @@ def get_optional_argument(name: str = None, position: int = None, *args, **kwarg
     """
     if name in kwargs:
         return kwargs[name]
-    elif len(args) >= position:
+    elif position is not None and len(args) > position:
         return args[position]
     if name is not None:
         raise TypeError(f"Expected argument '{name}' not found")
@@ -52,7 +52,7 @@ class DirDict:
     forbidden characters. Collisions are not detected or reported.
     """
 
-    def __init__(self, path: PathlibPath, directory_mode: int = 0x750, file_mode: int = 0o640,
+    def __init__(self, path: PathlibPath, directory_mode: int = 0o750, file_mode: int = 0o640,
                  exist_ok: bool = True) -> None:
         initialize_base_path(path, mode=directory_mode, exist_ok=exist_ok)
         self.path = path
@@ -151,7 +151,7 @@ class DirDict:
         guard_string_type(key)
         try:
             return get(self.get_key_path(key))
-        except KeyError:
+        except (KeyError, OSError):
             return default
 
     def clear(self) -> None:
@@ -224,7 +224,9 @@ class DirDict:
         :param iterable: As with `dict`
         :param kwargs: As with `dict`
         """
-        for (k, v) in dict(iterable.items() | kwargs.items()):
+        for k, v in iterable.items():
+            self.__setitem__(k, v)
+        for k, v in kwargs.items():
             self.__setitem__(k, v)
 
     def get_key_path(self, key: PathlibPath) -> PurePath:
@@ -341,19 +343,32 @@ class TTLCache(DirDict):
 
     def guard_expired(self, key: AnyStr) -> None:
         """
-        Remove key if expired
+        Remove key if expired and raise KeyError
 
         :param key: Key to check
         :raises: KeyError
         """
         if self.is_expired(key):
-            super().__delitem__(key)
+            # Delete directly via functions layer to avoid circular containment checks
+            del_(self.get_key_path(key))
+            raise KeyError(key)
 
     def flush_expired_keys(self, key_set: Set[AnyStr] = None) -> Set[AnyStr]:
         unverified_keys = key_set if key_set is not None else super().keys()
-        expired_keys = {key for key in unverified_keys if self.is_expired(key)}
+        expired_keys = set()
+        for key in unverified_keys:
+            try:
+                if self.is_expired(key):
+                    expired_keys.add(key)
+            except KeyError:
+                # Key no longer exists, skip
+                pass
         for key in expired_keys:
-            super().__delitem__(key)
+            try:
+                del_(self.get_key_path(key))
+            except OSError:
+                # Already deleted, skip
+                pass
         return expired_keys
 
 

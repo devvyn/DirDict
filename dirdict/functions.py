@@ -14,7 +14,6 @@ from datetime import timedelta, datetime
 from os import PathLike
 from pathlib import Path, PurePath
 from shutil import rmtree
-from time import timezone
 from typing import Union, Set
 
 PathlibPath = Union[bytes, str, PathLike]
@@ -44,14 +43,14 @@ def remove_base_path(path: PathlibPath) -> None:
     rmtree(path=path)
 
 
-def keys(path: PathlibPath) -> Set[str]:  # @todo confirm whether bytes may be returned instead of str
+def keys(path: PathlibPath) -> Set[str]:
     """
     Wrapper for os.listdir(directory)
 
-    :return: Names of all files in directory, or an empty list
+    :return: Names of all files in directory, or an empty set
     :raises: OSError
     """
-    return {*Path(path).iterdir()}
+    return {p.name for p in Path(path).iterdir()}
 
 
 def get(*pathsegments: PathlibPath, ttl_seconds=None) -> bytes:
@@ -98,33 +97,27 @@ def del_(path: PathlibPath) -> None:
     Path(path).unlink()
 
 
-def get_file_age(path: PathlibPath, relative_to: datetime = None, tz: timezone = None) -> timedelta:
+def get_file_age(path: PathlibPath, relative_to: datetime = None) -> timedelta:
     """
     Get file's age based on last modified time, relative to a given time.
 
-    Timezone is gathered from `time` module at module load time.
-
     :param path: Path of file
-    :param relative_to: datetime to which to compare; timezone should match that of file system records
-    :param tz: Timezone; Default: local timezone
-    :return:
+    :param relative_to: datetime to which to compare; defaults to now
+    :return: timedelta representing the age of the file (positive = file is older)
     """
-    if tz is None:
-        tz = timezone
     if relative_to is None:
-        relative_to = datetime.now(tz=tz)
-    return get_file_modified_time(path, tz=tz) - relative_to
+        relative_to = datetime.now()
+    return relative_to - get_file_modified_time(path)
 
 
-def get_file_modified_time(path: PathlibPath, tz: timezone = timezone) -> datetime:
+def get_file_modified_time(path: PathlibPath) -> datetime:
     """
     Get file modified datetime
 
-    :param tz:
     :param path: Path of file
     :return: File modification time, as reported by OS
     """
-    return datetime.fromtimestamp(Path(path).stat().st_mtime_ns, tz=tz)
+    return datetime.fromtimestamp(Path(path).stat().st_mtime)
 
 
 def dir_len(path: PathlibPath) -> int:
