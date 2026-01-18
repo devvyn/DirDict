@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dirdict"
+version = "0.1.0"
+description = "Dictionary-like wrapper over filesystem directories"
+readme = "LICENSE"
+license = "MIT"
+authors = [
+    {name = "Devvyn Patrick Murphy"}
+]
+requires-python = ">=3.8"
+
+[tool.setuptools.packages.find]
+include = ["dirdict*"]
+exclude = ["tests*", "features*"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "behave>=1.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["dirdict"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+]
